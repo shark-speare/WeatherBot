@@ -14,29 +14,33 @@ class City(Ext):
 
     @commands.command()
     async def city(self,ctx,location):
-        #尋找地點在清單中的位置
+        # 尋找地點在清單中的位置
         for datas in self.data:
             if location == datas["locationName"]:
                 index = self.data.index(datas)
                 break
         
-        #將dataset設為該地區的資料
+        # 將dataset設為該地區的資料
         dataset = self.data[index]["weatherElement"]
         
         d1, d2, d3 = {},{},{}
         
-        #將三天的資料分別寫入三個紀錄辭典內
-        #第一個[0]為天氣資料，第二個[0]為天
-        for dindex,day in enumerate([d1,d2,d3]):
-
-            for eindex,ele in enumerate(["wx","tmax","tmin"]): #問題在這
-                
-                day[ele] = dataset[eindex]["time"][dindex]["elementValue"][0]["value"]
-                await ctx.send(day[ele])
-
-
-
+        # 將三天的資料分別寫入三個紀錄辭典內
+        # 第一個[0]為天氣資料，第二個[0]為天
+        # 由於wx的資料結構不同，所以用if else分開處理
+        for eindex,ele in enumerate(["wx","tmax","tmin"],start=0):
+            for dindex,day in enumerate([d1,d2,d3]):
         
+                if ele == "wx":
+                    day[ele] = dataset[eindex]["time"][dindex]["elementValue"][0]["value"]
+                else:
+                    day[ele] = dataset[eindex]["time"][dindex]["elementValue"]["value"]
+
+
+        # 發送資料
+        await ctx.send(f"{location}三日天氣預報")
+        for day, des in zip([d1,d2,d3],["明天","後天","大後天"]):
+            await ctx.send(f"{des}:\n天氣為{day['wx']}，溫度{day['tmin']}°C - {day['tmax']}")
 
 async def setup(bot):
     await bot.add_cog(City(bot))
