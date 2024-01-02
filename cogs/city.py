@@ -40,7 +40,7 @@ class City(Ext):
         # 發送資料
         await ctx.send(f"{location}三日天氣預報")
         for day, des in zip([d1,d2,d3],["明天","後天","大後天"]):
-            await ctx.send(f"{des}:\n天氣為{day['wx']}，溫度{day['tmin']}°C - {day['tmax']}")
+            await ctx.send(f"{des}:\n天氣為{day['wx']}，溫度{day['tmin']}°C - {day['tmax']}°C")
 
 async def setup(bot):
     await bot.add_cog(City(bot))
