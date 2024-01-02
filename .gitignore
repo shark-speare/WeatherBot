@@ -160,3 +160,6 @@ cython_debug/
 #.idea/
 secret.json
 test.py
+poetry.lock
+pyproject.toml
+.replit
