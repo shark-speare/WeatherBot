@@ -11,16 +11,17 @@ class Local(Ext):
         self.params = {"Authorization":self.apikey,"format":"JSON"}
 
     @commands.command(description="全台縣市近3小時天氣預報")
-    async def local(self,ctx,location,index:int):
-        if index <= 32:
-        
+    async def local(self,ctx,location,hour:int):
+        if hour <= 96:
+            index = hour // 3
+
             self.params["locationName"] = location
             dataset = requests.get(url= self.url, params=self.params).json()["records"]["locations"][0]["location"][0]["weatherElement"][6]["time"]
 
-            value = dataset[index-1]["elementValue"][0]["value"]
+            value = dataset[index]["elementValue"][0]["value"]
 
-            await ctx.send(f"{location}近{3*(index)}小時預報:\n{value}")
-        
+            await ctx.send(f"{location}近{3*index}~{3*(index+1)}小時預報:\n{value}")
+    
         else:
             await ctx.send("最多提供96小時的資料，資料序需小於32")
 
