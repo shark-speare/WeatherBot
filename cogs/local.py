@@ -11,7 +11,7 @@ class Local(Ext):
         self.params = {"Authorization":self.apikey,"format":"JSON"}
 
     @commands.command(description="全台縣市近3小時天氣預報")
-    async def local(self,ctx,location,hour:int):
+    async def local(self,ctx,location,hour:int=0):
         if hour <= 96:
             index = hour // 3
 
